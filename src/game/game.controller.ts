@@ -1,35 +1,19 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Body, Post } from '@nestjs/common';
 import { Game } from './game.interface';
+import { GameService } from './game.service';
+import { CreateGameDto } from './game.dto';
 
 @Controller('game')
 export class GameController {
+  constructor(private readonly service: GameService) {}
+
   @Get('overview')
-  getAllOverview(): Game[] {
-    return [
-      {
-        id: 123,
-        src: '/img/game.png',
-        alt: 'Imagem do Game',
-        title: 'Moonlighter',
-        price: 599.9,
-        stars: 3,
-      },
-      {
-        id: 123,
-        src: '/img/game.png',
-        alt: 'Imagem do Game',
-        title: 'Moonlighter',
-        price: 599.9,
-        stars: 3,
-      },
-      {
-        id: 123,
-        src: '/img/game.png',
-        alt: 'Imagem do Game',
-        title: 'Moonlighter',
-        price: 599.9,
-        stars: 3,
-      },
-    ];
+  async getAllOverview(): Promise<Game[]> {
+    return await this.service.findAll();
+  }
+
+  @Post()
+  async create(@Body() createGameDto: CreateGameDto) {
+    return await this.service.create(createGameDto);
   }
 }
